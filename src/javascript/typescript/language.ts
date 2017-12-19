@@ -73,16 +73,16 @@ export default class TypescriptGenerator {
         }
       });
 
-    const typeAlias = this.typeAliasObject(name, fields, {
+    const inputType = this.interface(name, fields, {
       keyInheritsNullability: true
     });
 
-    typeAlias.leadingComments = [{
+    inputType.leadingComments = [{
       type: 'CommentLine',
       value: ` ${description}`
     } as t.CommentLine]
 
-    return typeAlias;
+    return inputType;
   }
 
   public objectTypeAnnotation(fields: ObjectProperty[], {
@@ -119,14 +119,15 @@ export default class TypescriptGenerator {
     return objectTypeAnnotation;
   }
 
-  public typeAliasObject(name: string, fields: ObjectProperty[], {
+  public interface(name: string, fields: ObjectProperty[], {
     keyInheritsNullability = false
   }: {
     keyInheritsNullability?: boolean
   } = {}) {
-    return t.typeAlias(
+    return t.interfaceDeclaration(
       t.identifier(name),
       undefined,
+      [],
       this.objectTypeAnnotation(fields, {
         keyInheritsNullability
       })
