@@ -77,7 +77,7 @@ export function generateSource(
   Object.values(context.operations)
     .forEach((operation) => {
       generator.fileHeader();
-      generator.typeAliasesForOperation(operation);
+      generator.interfacesForOperation(operation);
       printEnumsAndInputObjects(generator, context);
 
       const output = generator.printer.printAndClear();
@@ -94,7 +94,7 @@ export function generateSource(
   Object.values(context.fragments)
     .forEach((fragment) => {
       generator.fileHeader();
-      generator.typeAliasesForFragment(fragment);
+      generator.typesForFragment(fragment);
       printEnumsAndInputObjects(generator, context);
 
       const output = generator.printer.printAndClear();
@@ -141,7 +141,7 @@ export class TypescriptAPIGenerator extends TypescriptGenerator {
     this.printer.enqueue(this.inputObjectDeclaration(inputObjectType));
   }
 
-  public typeAliasesForOperation(operation: Operation) {
+  public interfacesForOperation(operation: Operation) {
     const {
       operationType,
       operationName,
@@ -164,14 +164,14 @@ export class TypescriptAPIGenerator extends TypescriptGenerator {
     const properties = this.getPropertiesForVariant(variant);
 
     const exportedTypeAlias = this.exportDeclaration(
-      this.typeAliasObject(operationName, properties)
+      this.interface(operationName, properties)
     );
 
     this.printer.enqueue(exportedTypeAlias);
     this.scopeStackPop();
   }
 
-  public typeAliasesForFragment(fragment: Fragment) {
+  public typesForFragment(fragment: Fragment) {
     const {
       fragmentName,
       selectionSet
@@ -192,7 +192,7 @@ export class TypescriptAPIGenerator extends TypescriptGenerator {
 
       const name = this.annotationFromScopeStack(this.scopeStack).id.name;
       const exportedTypeAlias = this.exportDeclaration(
-        this.typeAliasObject(
+        this.interface(
           name,
           properties
         )
@@ -207,7 +207,7 @@ export class TypescriptAPIGenerator extends TypescriptGenerator {
 
         const name = this.annotationFromScopeStack(this.scopeStack).id.name;
         const exportedTypeAlias = this.exportDeclaration(
-          this.typeAliasObject(
+          this.interface(
             name,
             properties
           )
@@ -285,7 +285,7 @@ export class TypescriptAPIGenerator extends TypescriptGenerator {
       const variant = variants[0];
       const properties = this.getPropertiesForVariant(variant);
       exportedTypeAlias = this.exportDeclaration(
-        this.typeAliasObject(
+        this.interface(
           this.annotationFromScopeStack(this.scopeStack).id.name,
           properties
         )
