@@ -12,29 +12,37 @@ Object {
 // GraphQL query operation: HeroName
 // ====================================================
 
-export type HeroName_hero_Human_friends = {
-  __typename: \\"Human\\",
-  name: string, // What this human calls themselves
-} | {
-  __typename: \\"Droid\\",
-  id: string,   // The ID of the droid
-};
+export interface HeroName_hero_Human_friends_Human {
+  __typename: \\"Human\\";
+  name: string;  // What this human calls themselves
+}
 
-export type HeroName_hero = {
-  __typename: \\"Human\\",
-  name: string,                                            // What this human calls themselves
-  id: string,                                              // The ID of the human
-  homePlanet: string | undefined | null,                   // The home planet of the human, or null if unknown
-  friends: HeroName_hero_Human_friends | undefined | null, // This human's friends, or an empty list if they have none
-} | {
-  __typename: \\"Droid\\",
-  name: string,                                            // What others call this droid
-  id: string,                                              // The ID of the droid
-  appearsIn: (?Episode)[],                                 // The movies this droid appears in
-};
+export interface HeroName_hero_Human_friends_Droid {
+  __typename: \\"Droid\\";
+  id: string;  // The ID of the droid
+}
+
+export type HeroName_hero_Human_friends = HeroName_hero_Human_friends_Human | HeroName_hero_Human_friends_Droid;
+
+export interface HeroName_hero_Human {
+  __typename: \\"Human\\";
+  name: string;                                            // What this human calls themselves
+  id: string;                                              // The ID of the human
+  homePlanet: string | null;                               // The home planet of the human, or null if unknown
+  friends: (HeroName_hero_Human_friends | null)[] | null;  // This human's friends, or an empty list if they have none
+}
+
+export interface HeroName_hero_Droid {
+  __typename: \\"Droid\\";
+  name: string;                   // What others call this droid
+  id: string;                     // The ID of the droid
+  appearsIn: (Episode | null)[];  // The movies this droid appears in
+}
+
+export type HeroName_hero = HeroName_hero_Human | HeroName_hero_Droid;
 
 export interface HeroName {
-  hero: HeroName_hero | undefined | null
+  hero: HeroName_hero | null;
 }
 
 //==============================================================
@@ -55,7 +63,7 @@ export enum Episode {
 // END Enums and Input Objects
 //==============================================================",
   },
-  "__generated__/droidFragment.js": TypescriptGeneratedFile {
+  "__generated__/droidFragment.ts": TypescriptGeneratedFile {
     "fileContents": "
 
 /* tslint:disable */
@@ -66,8 +74,8 @@ export enum Episode {
 // ====================================================
 
 export interface droidFragment {
-  __typename: \\"Droid\\",
-  appearsIn: (?Episode)[], // The movies this droid appears in
+  __typename: \\"Droid\\";
+  appearsIn: (Episode | null)[];  // The movies this droid appears in
 }
 
 //==============================================================
@@ -88,7 +96,7 @@ export enum Episode {
 // END Enums and Input Objects
 //==============================================================",
   },
-  "__generated__/humanFragment.js": TypescriptGeneratedFile {
+  "__generated__/humanFragment.ts": TypescriptGeneratedFile {
     "fileContents": "
 
 /* tslint:disable */
@@ -98,18 +106,22 @@ export enum Episode {
 // GraphQL fragment: humanFragment
 // ====================================================
 
-export type humanFragment_friends = {
-  __typename: \\"Human\\",
-  name: string, // What this human calls themselves
-} | {
-  __typename: \\"Droid\\",
-  id: string,   // The ID of the droid
-};
+export interface humanFragment_friends_Human {
+  __typename: \\"Human\\";
+  name: string;  // What this human calls themselves
+}
+
+export interface humanFragment_friends_Droid {
+  __typename: \\"Droid\\";
+  id: string;  // The ID of the droid
+}
+
+export type humanFragment_friends = humanFragment_friends_Human | humanFragment_friends_Droid;
 
 export interface humanFragment {
-  __typename: \\"Human\\",
-  homePlanet: string | undefined | null,             // The home planet of the human, or null if unknown
-  friends: humanFragment_friends | undefined | null, // This human's friends, or an empty list if they have none
+  __typename: \\"Human\\";
+  homePlanet: string | null;                         // The home planet of the human, or null if unknown
+  friends: (humanFragment_friends | null)[] | null;  // This human's friends, or an empty list if they have none
 }
 
 //==============================================================
@@ -135,7 +147,7 @@ export enum Episode {
 
 exports[`Typescript codeGeneration fragment with fragment spreads 1`] = `
 Object {
-  "__generated__/anotherFragment.js": TypescriptGeneratedFile {
+  "__generated__/anotherFragment.ts": TypescriptGeneratedFile {
     "fileContents": "
 
 /* tslint:disable */
@@ -146,9 +158,9 @@ Object {
 // ====================================================
 
 export interface anotherFragment {
-  __typename: \\"Human\\" | \\"Droid\\",
-  id: string,   // The ID of the character
-  name: string, // The name of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  id: string;    // The ID of the character
+  name: string;  // The name of the character
 }
 
 //==============================================================
@@ -162,7 +174,7 @@ export interface anotherFragment {
 // END Enums and Input Objects
 //==============================================================",
   },
-  "__generated__/simpleFragment.js": TypescriptGeneratedFile {
+  "__generated__/simpleFragment.ts": TypescriptGeneratedFile {
     "fileContents": "
 
 /* tslint:disable */
@@ -173,8 +185,8 @@ export interface anotherFragment {
 // ====================================================
 
 export interface simpleFragment {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string, // The name of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;  // The name of the character
 }
 
 //==============================================================
@@ -193,7 +205,7 @@ export interface simpleFragment {
 
 exports[`Typescript codeGeneration fragment with fragment spreads with inline fragment 1`] = `
 Object {
-  "__generated__/anotherFragment.js": TypescriptGeneratedFile {
+  "__generated__/anotherFragment.ts": TypescriptGeneratedFile {
     "fileContents": "
 
 /* tslint:disable */
@@ -204,16 +216,16 @@ Object {
 // ====================================================
 
 export interface anotherFragment_Droid {
-  __typename: \\"Droid\\",
-  id: string,   // The ID of the droid
-  name: string, // What others call this droid
+  __typename: \\"Droid\\";
+  id: string;    // The ID of the droid
+  name: string;  // What others call this droid
 }
 
 export interface anotherFragment_Human {
-  __typename: \\"Human\\",
-  id: string,              // The ID of the human
-  name: string,            // What this human calls themselves
-  appearsIn: (?Episode)[], // The movies this human appears in
+  __typename: \\"Human\\";
+  id: string;                     // The ID of the human
+  name: string;                   // What this human calls themselves
+  appearsIn: (Episode | null)[];  // The movies this human appears in
 }
 
 export type anotherFragment = anotherFragment_Droid | anotherFragment_Human;
@@ -236,7 +248,7 @@ export enum Episode {
 // END Enums and Input Objects
 //==============================================================",
   },
-  "__generated__/simpleFragment.js": TypescriptGeneratedFile {
+  "__generated__/simpleFragment.ts": TypescriptGeneratedFile {
     "fileContents": "
 
 /* tslint:disable */
@@ -247,8 +259,8 @@ export enum Episode {
 // ====================================================
 
 export interface simpleFragment {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string, // The name of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;  // The name of the character
 }
 
 //==============================================================
@@ -285,12 +297,12 @@ Object {
 // ====================================================
 
 export interface CustomScalar_commentTest {
-  __typename: \\"CommentTest\\",
-  multiLine: string | undefined | null, // This is a multi-line comment.
+  __typename: \\"CommentTest\\";
+  multiLine: string | null;  // This is a multi-line comment.
 }
 
 export interface CustomScalar {
-  commentTest: CustomScalar_commentTest | undefined | null
+  commentTest: CustomScalar_commentTest | null;
 }
 
 //==============================================================
@@ -320,13 +332,13 @@ Object {
 // ====================================================
 
 export interface HeroInlineFragment_hero {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string, // The name of the character
-  id: string,   // The ID of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;  // The name of the character
+  id: string;    // The ID of the character
 }
 
 export interface HeroInlineFragment {
-  hero: HeroInlineFragment_hero | undefined | null
+  hero: HeroInlineFragment_hero | null;
 }
 
 //==============================================================
@@ -363,25 +375,29 @@ Object {
 // ====================================================
 
 export interface HeroName_hero_Human_friends {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string, // The name of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;  // The name of the character
 }
 
-export type HeroName_hero = {
-  __typename: \\"Human\\",
-  name: string,                                            // What this human calls themselves
-  id: string,                                              // The ID of the human
-  homePlanet: string | undefined | null,                   // The home planet of the human, or null if unknown
-  friends: HeroName_hero_Human_friends | undefined | null, // This human's friends, or an empty list if they have none
-} | {
-  __typename: \\"Droid\\",
-  name: string,                                            // What others call this droid
-  id: string,                                              // The ID of the droid
-  appearsIn: (?Episode)[],                                 // The movies this droid appears in
-};
+export interface HeroName_hero_Human {
+  __typename: \\"Human\\";
+  name: string;                                            // What this human calls themselves
+  id: string;                                              // The ID of the human
+  homePlanet: string | null;                               // The home planet of the human, or null if unknown
+  friends: (HeroName_hero_Human_friends | null)[] | null;  // This human's friends, or an empty list if they have none
+}
+
+export interface HeroName_hero_Droid {
+  __typename: \\"Droid\\";
+  name: string;                   // What others call this droid
+  id: string;                     // The ID of the droid
+  appearsIn: (Episode | null)[];  // The movies this droid appears in
+}
+
+export type HeroName_hero = HeroName_hero_Human | HeroName_hero_Droid;
 
 export interface HeroName {
-  hero: HeroName_hero | undefined | null
+  hero: HeroName_hero | null;
 }
 
 //==============================================================
@@ -418,31 +434,35 @@ Object {
 // ====================================================
 
 export interface HeroName_hero_Human_friends {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string, // The name of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;  // The name of the character
+}
+
+export interface HeroName_hero_Human {
+  __typename: \\"Human\\";
+  name: string;                                            // What this human calls themselves
+  id: string;                                              // The ID of the human
+  homePlanet: string | null;                               // The home planet of the human, or null if unknown
+  friends: (HeroName_hero_Human_friends | null)[] | null;  // This human's friends, or an empty list if they have none
 }
 
 export interface HeroName_hero_Droid_friends {
-  __typename: \\"Human\\" | \\"Droid\\",
-  id: string, // The ID of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  id: string;  // The ID of the character
 }
 
-export type HeroName_hero = {
-  __typename: \\"Human\\",
-  name: string,                                            // What this human calls themselves
-  id: string,                                              // The ID of the human
-  homePlanet: string | undefined | null,                   // The home planet of the human, or null if unknown
-  friends: HeroName_hero_Human_friends | undefined | null, // This human's friends, or an empty list if they have none
-} | {
-  __typename: \\"Droid\\",
-  name: string,                                            // What others call this droid
-  id: string,                                              // The ID of the droid
-  appearsIn: (?Episode)[],                                 // The movies this droid appears in
-  friends: HeroName_hero_Droid_friends | undefined | null, // This droid's friends, or an empty list if they have none
-};
+export interface HeroName_hero_Droid {
+  __typename: \\"Droid\\";
+  name: string;                                            // What others call this droid
+  id: string;                                              // The ID of the droid
+  appearsIn: (Episode | null)[];                           // The movies this droid appears in
+  friends: (HeroName_hero_Droid_friends | null)[] | null;  // This droid's friends, or an empty list if they have none
+}
+
+export type HeroName_hero = HeroName_hero_Human | HeroName_hero_Droid;
 
 export interface HeroName {
-  hero: HeroName_hero | undefined | null
+  hero: HeroName_hero | null;
 }
 
 //==============================================================
@@ -480,13 +500,13 @@ TypescriptGeneratedFile {
 // ====================================================
 
 export interface HeroName_hero {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string, // The name of the character
-  id: string,   // The ID of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;  // The name of the character
+  id: string;    // The ID of the character
 }
 
 export interface HeroName {
-  hero: HeroName_hero | undefined | null
+  hero: HeroName_hero | null;
 }
 
 //==============================================================
@@ -505,16 +525,16 @@ export enum Episode {
 
 // The input object sent when someone is creating a new review
 interface ReviewInput {
-  stars: number,
-  commentary?: string | undefined | null,
-  favorite_color?: ColorInput | undefined | null,
+  stars: number;
+  commentary?: string | null;
+  favorite_color?: ColorInput | null;
 }
 
 // The input object sent when passing in a color
 interface ColorInput {
-  red: number,
-  green: number,
-  blue: number,
+  red: number;
+  green: number;
+  blue: number;
 }
 
 //==============================================================
@@ -537,13 +557,13 @@ TypescriptGeneratedFile {
 // ====================================================
 
 export interface SomeOther_hero {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string,            // The name of the character
-  appearsIn: (?Episode)[], // The movies this character appears in
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;                   // The name of the character
+  appearsIn: (Episode | null)[];  // The movies this character appears in
 }
 
 export interface SomeOther {
-  hero: SomeOther_hero | undefined | null
+  hero: SomeOther_hero | null;
 }
 
 //==============================================================
@@ -562,16 +582,16 @@ export enum Episode {
 
 // The input object sent when someone is creating a new review
 interface ReviewInput {
-  stars: number,
-  commentary?: string | undefined | null,
-  favorite_color?: ColorInput | undefined | null,
+  stars: number;
+  commentary?: string | null;
+  favorite_color?: ColorInput | null;
 }
 
 // The input object sent when passing in a color
 interface ColorInput {
-  red: number,
-  green: number,
-  blue: number,
+  red: number;
+  green: number;
+  blue: number;
 }
 
 //==============================================================
@@ -594,13 +614,13 @@ TypescriptGeneratedFile {
 // ====================================================
 
 export interface ReviewMovie_createReview {
-  __typename: \\"Review\\",
-  stars: number,                         // The number of stars this review gave, 1-5
-  commentary: string | undefined | null, // Comment about the movie
+  __typename: \\"Review\\";
+  stars: number;              // The number of stars this review gave, 1-5
+  commentary: string | null;  // Comment about the movie
 }
 
 export interface ReviewMovie {
-  createReview: ReviewMovie_createReview | undefined | null
+  createReview: ReviewMovie_createReview | null;
 }
 
 //==============================================================
@@ -619,16 +639,16 @@ export enum Episode {
 
 // The input object sent when someone is creating a new review
 interface ReviewInput {
-  stars: number,
-  commentary?: string | undefined | null,
-  favorite_color?: ColorInput | undefined | null,
+  stars: number;
+  commentary?: string | null;
+  favorite_color?: ColorInput | null;
 }
 
 // The input object sent when passing in a color
 interface ColorInput {
-  red: number,
-  green: number,
-  blue: number,
+  red: number;
+  green: number;
+  blue: number;
 }
 
 //==============================================================
@@ -637,7 +657,7 @@ interface ColorInput {
 }
 `;
 
-exports[`Typescript codeGeneration multiple files 7`] = `"/some/file/__generated__/someFragment.js"`;
+exports[`Typescript codeGeneration multiple files 7`] = `"/some/file/__generated__/someFragment.ts"`;
 
 exports[`Typescript codeGeneration multiple files 8`] = `
 TypescriptGeneratedFile {
@@ -651,8 +671,8 @@ TypescriptGeneratedFile {
 // ====================================================
 
 export interface someFragment {
-  __typename: \\"Human\\" | \\"Droid\\",
-  appearsIn: (?Episode)[], // The movies this character appears in
+  __typename: \\"Human\\" | \\"Droid\\";
+  appearsIn: (Episode | null)[];  // The movies this character appears in
 }
 
 //==============================================================
@@ -671,16 +691,16 @@ export enum Episode {
 
 // The input object sent when someone is creating a new review
 interface ReviewInput {
-  stars: number,
-  commentary?: string | undefined | null,
-  favorite_color?: ColorInput | undefined | null,
+  stars: number;
+  commentary?: string | null;
+  favorite_color?: ColorInput | null;
 }
 
 // The input object sent when passing in a color
 interface ColorInput {
-  red: number,
-  green: number,
-  blue: number,
+  red: number;
+  green: number;
+  blue: number;
 }
 
 //==============================================================
@@ -702,13 +722,13 @@ Object {
 // ====================================================
 
 export interface HeroFragment_hero {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string, // The name of the character
-  id: string,   // The ID of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;  // The name of the character
+  id: string;    // The ID of the character
 }
 
 export interface HeroFragment {
-  hero: HeroFragment_hero | undefined | null
+  hero: HeroFragment_hero | null;
 }
 
 //==============================================================
@@ -729,7 +749,7 @@ export enum Episode {
 // END Enums and Input Objects
 //==============================================================",
   },
-  "__generated__/simpleFragment.js": TypescriptGeneratedFile {
+  "__generated__/simpleFragment.ts": TypescriptGeneratedFile {
     "fileContents": "
 
 /* tslint:disable */
@@ -740,8 +760,8 @@ export enum Episode {
 // ====================================================
 
 export interface simpleFragment {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string, // The name of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;  // The name of the character
 }
 
 //==============================================================
@@ -767,7 +787,7 @@ export enum Episode {
 
 exports[`Typescript codeGeneration simple fragment 1`] = `
 Object {
-  "__generated__/SimpleFragment.js": TypescriptGeneratedFile {
+  "__generated__/SimpleFragment.ts": TypescriptGeneratedFile {
     "fileContents": "
 
 /* tslint:disable */
@@ -778,8 +798,8 @@ Object {
 // ====================================================
 
 export interface SimpleFragment {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string, // The name of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;  // The name of the character
 }
 
 //==============================================================
@@ -809,13 +829,13 @@ Object {
 // ====================================================
 
 export interface HeroName_hero {
-  __typename: \\"Human\\" | \\"Droid\\",
-  name: string, // The name of the character
-  id: string,   // The ID of the character
+  __typename: \\"Human\\" | \\"Droid\\";
+  name: string;  // The name of the character
+  id: string;    // The ID of the character
 }
 
 export interface HeroName {
-  hero: HeroName_hero | undefined | null
+  hero: HeroName_hero | null;
 }
 
 //==============================================================
@@ -852,13 +872,13 @@ Object {
 // ====================================================
 
 export interface ReviewMovie_createReview {
-  __typename: \\"Review\\",
-  stars: number,                         // The number of stars this review gave, 1-5
-  commentary: string | undefined | null, // Comment about the movie
+  __typename: \\"Review\\";
+  stars: number;              // The number of stars this review gave, 1-5
+  commentary: string | null;  // Comment about the movie
 }
 
 export interface ReviewMovie {
-  createReview: ReviewMovie_createReview | undefined | null
+  createReview: ReviewMovie_createReview | null;
 }
 
 //==============================================================
@@ -877,16 +897,16 @@ export enum Episode {
 
 // The input object sent when someone is creating a new review
 interface ReviewInput {
-  stars: number,
-  commentary?: string | undefined | null,
-  favorite_color?: ColorInput | undefined | null,
+  stars: number;
+  commentary?: string | null;
+  favorite_color?: ColorInput | null;
 }
 
 // The input object sent when passing in a color
 interface ColorInput {
-  red: number,
-  green: number,
-  blue: number,
+  red: number;
+  green: number;
+  blue: number;
 }
 
 //==============================================================
