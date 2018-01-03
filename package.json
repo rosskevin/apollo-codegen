@@ -1,5 +1,5 @@
 {
-  "name": "apollo-codegen",
+  "name": "@alienfast/apollo-codegen",
   "version": "0.18.3",
   "description": "Generate API code or type annotations based on a GraphQL schema and query documents",
   "main": "./lib/index.js",
