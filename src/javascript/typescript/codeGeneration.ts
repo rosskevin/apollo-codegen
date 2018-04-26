@@ -144,6 +144,7 @@ export class TypescriptAPIGenerator extends TypescriptGenerator {
     const {
       operationType,
       operationName,
+      variables,
       selectionSet
     } = operation;
 
@@ -168,6 +169,19 @@ export class TypescriptAPIGenerator extends TypescriptGenerator {
 
     this.printer.enqueue(exportedTypeAlias);
     this.scopeStackPop();
+
+    // Generate the variables interface if the operation has any variables
+    if (variables.length > 0) {
+      const interfaceName = operationName + 'Variables';
+      this.scopeStackPush(interfaceName);
+      this.printer.enqueue(this.exportDeclaration(
+        this.interface(interfaceName, variables.map((variable) => ({
+          name: variable.name,
+          type: this.typeFromGraphQLType(variable.type)
+        })), { keyInheritsNullability: true })
+      ));
+      this.scopeStackPop();
+    }
   }
 
   public interfacesForFragment(fragment: Fragment) {
@@ -272,6 +286,8 @@ export class TypescriptAPIGenerator extends TypescriptGenerator {
   private handleFieldSelectionSetValue(generatedIdentifier: t.Identifier, field: Field): ObjectProperty {
     const { selectionSet } = field;
 
+    const type = this.typeFromGraphQLType(field.type, generatedIdentifier.name);
+
     const typeCase = this.getTypeCasesForSelectionSet(selectionSet as SelectionSet);
     const variants = typeCase.exhaustiveVariants;
 
@@ -315,9 +331,7 @@ export class TypescriptAPIGenerator extends TypescriptGenerator {
     return {
       name: field.alias ? field.alias : field.name,
       description: field.description,
-      type: this.typeFromGraphQLType(field.type, {
-        replaceObjectTypeIdentifierWith: generatedIdentifier
-      })
+      type
     };
   }
 

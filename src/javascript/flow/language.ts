@@ -7,6 +7,10 @@ import {
   CompilerOptions
 } from '../../compiler';
 
+import {
+  sortEnumValues
+} from '../../utilities/graphql';
+
 import { createTypeAnnotationFromGraphQLTypeFunction } from './helpers';
 
 import * as t from '@babel/types';
@@ -18,7 +22,8 @@ export type ObjectProperty = {
 }
 
 export interface FlowCompilerOptions extends CompilerOptions {
-  useFlowExactObjects: boolean
+  useFlowExactObjects: boolean;
+  useFlowReadOnlyTypes: boolean;
 }
 
 export default class FlowGenerator {
@@ -33,7 +38,7 @@ export default class FlowGenerator {
 
   public enumerationDeclaration(type: GraphQLEnumType) {
     const { name, description } = type;
-    const unionValues = type.getValues().map(({ value }) => {
+    const unionValues = sortEnumValues(type.getValues()).map(({ value }) => {
       const type = t.stringLiteralTypeAnnotation();
       type.value = value;
 
@@ -84,22 +89,22 @@ export default class FlowGenerator {
   } = {}) {
     const objectTypeAnnotation = t.objectTypeAnnotation(
       fields.map(({name, description, annotation}) => {
-
         const objectTypeProperty = t.objectTypeProperty(
-          t.identifier(
-            // Nullable fields on input objects do not have to be defined
-            // as well, so allow these fields to be "undefined"
-            (keyInheritsNullability && annotation.type === "NullableTypeAnnotation")
-              ? name + '?'
-              : name
-          ),
+          t.identifier(name),
           annotation
         );
+
+        // Nullable fields on input objects do not have to be defined
+        // as well, so allow these fields to be "undefined"
+        objectTypeProperty.optional = keyInheritsNullability && annotation.type === "NullableTypeAnnotation";
+        if (this.options.useFlowReadOnlyTypes) {
+          objectTypeProperty.variance = {kind: 'plus'};
+        }
 
         if (description) {
           objectTypeProperty.trailingComments = [{
             type: 'CommentLine',
-            value: ` ${description.replace('\n', ' ')}`
+            value: ` ${description.replace(new RegExp('\n', 'g'), ' ')}`
           } as t.CommentLine]
         }
 
